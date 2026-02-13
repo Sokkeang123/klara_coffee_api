@@ -5,16 +5,16 @@ const Order = require("./order");
 const Payment = sequelize.define("Payment", {
   method: {
     type: DataTypes.ENUM("QR", "Card", "Cash"),
-    allowNull: false
+    allowNull: false,
   },
   amount: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: false,
   },
-  status: {
+  paymentStatus: {
     type: DataTypes.ENUM("Pending", "Paid", "Failed"),
-    defaultValue: "Pending"
-  }
+    defaultValue: "Pending",
+  },
 });
 
 // Relation: each payment belongs to an order
