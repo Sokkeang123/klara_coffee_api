@@ -3,7 +3,7 @@ const router = express.Router();
 const menuController = require("../controllers/menuController");
 const auth = require("../middleware/authMiddleware");
 const role = require("../middleware/roleMiddleware");
-
+const upload = require("../middleware/uploadMenuImage");
 /**
  * @swagger
  * tags:
@@ -26,25 +26,42 @@ router.get("/", auth, menuController.getAllMenu);
  * @swagger
  * /menu:
  *   post:
- *     summary: Add a new menu item (Admin only)
+ *     summary: Add a new menu item with image (Admin only)
  *     tags: [Menu]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
+ *             required:
+ *               - name
+ *               - price
  *             properties:
- *               name: { type: string, example: Latte }
- *               description: { type: string, example: Hot coffee with milk }
- *               price: { type: number, example: 2.5 }
+ *               name:
+ *                 type: string
+ *                 example: Latte
+ *               description:
+ *                 type: string
+ *                 example: Hot coffee with milk
+ *               price:
+ *                 type: number
+ *                 example: 2.5
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
- *       201: { description: Menu item created }
- *       401: { description: Unauthorized }
+ *       201:
+ *         description: Menu item created
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Access denied
  */
-router.post("/", auth, role("Admin"), menuController.createMenu);
+router.post("/", auth, role("Admin"), upload.single("image"), menuController.createMenu);
+// router.post("/", auth, role("Admin"), menuController.createMenu);
 
 /**
  * @swagger

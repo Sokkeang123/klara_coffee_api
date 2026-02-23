@@ -13,8 +13,22 @@ exports.getAllMenu = async (req, res) => {
 // Create a new menu item
 exports.createMenu = async (req, res) => {
   try {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
     const { name, description, price } = req.body;
-    const menu = await Menu.create({ name, description, price });
+
+    const imageUrl = req.file
+      ? `/uploads/menus/${req.file.filename}`
+      : null;
+
+    const menu = await Menu.create({
+      name,
+      description,
+      price,
+      imageUrl, // ✅ MUST include
+    });
+
     res.status(201).json(menu);
   } catch (err) {
     res.status(500).json({ message: "Failed to create menu", error: err.message });
