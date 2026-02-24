@@ -15,7 +15,7 @@ app.use("/menu", require("./routes/menuRoutes"));
 app.use("/orders", require("./routes/orderRoutes"));
 app.use("/payment", require("./routes/paymentRoutes"));
 app.use("/delivery", require("./routes/deliveryRoutes"));
-
+app.use("/customers", require("./routes/customerRoutes"));
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -26,7 +26,11 @@ app.use((err, req, res, next) => {
   next();
 });
 
-
 sequelize.sync().then(() => {
-  app.listen(5000, () => console.log("Server running on port 5000"));
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
+
+// sequelize.sync().then(() => {
+//   app.listen(5000, () => console.log("Server running on port 5000"));
+// });
